@@ -13,6 +13,7 @@ public class Bandit : MonoBehaviour {
 
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
+    private BoxCollider2D       m_box2d;
     private Sensor_Bandit       m_groundSensor;
     private Enemy_Sensor_Bandit m_enemySensor;
     private AttackRadius        m_attackRadius;
@@ -28,6 +29,7 @@ public class Bandit : MonoBehaviour {
     void Start () {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
+        m_box2d = GetComponent<BoxCollider2D>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Bandit>();
         m_enemySensor = transform.Find("EnemySensor").GetComponent<Enemy_Sensor_Bandit>();
         m_attackRadius = transform.Find("AttackRadius").GetComponent<AttackRadius>();
@@ -89,21 +91,29 @@ public class Bandit : MonoBehaviour {
 
         // -- Handle Animations --
         //Death
-        if (Input.GetKeyDown("e")) {
-            if(!m_isDead)
+        if (Input.GetKeyDown("e"))
+        {
+            if (!m_isDead)
+            {
                 m_animator.SetTrigger("Death");
+            }
             else
+            {
                 m_animator.SetTrigger("Recover");
+            }
 
             m_isDead = !m_isDead;
         }
-            
+
         //Hurt
         else if (Input.GetKeyDown("q"))
+        {
             m_animator.SetTrigger("Hurt");
+        }
 
         //Attack
-        else if(Input.GetMouseButtonDown(0)) {
+        else if (Input.GetMouseButtonDown(0))
+        {
             m_animator.SetTrigger("Attack");
             Invoke("Attack", 0.2f);
         }
@@ -113,25 +123,31 @@ public class Bandit : MonoBehaviour {
             m_combatIdle = !m_combatIdle;
 
         //Jump
-        else if (Input.GetKeyDown("space") && m_grounded) {
-            m_animator.SetTrigger("Jump");
+        else if (Input.GetKeyDown("space") && m_grounded)
+        {
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
+            m_animator.SetTrigger("Jump");
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
-            m_groundSensor.Disable(0.01f);
+            m_groundSensor.Disable(0.4f);
         }
 
         //Run
         else if (Mathf.Abs(inputX) > Mathf.Epsilon && moving)
+        {
             m_animator.SetInteger("AnimState", 2);
+        }
 
         //Combat Idle
         else if (m_combatIdle)
+        {
             m_animator.SetInteger("AnimState", 1);
-
+        }
         //Idle
         else
+        {
             m_animator.SetInteger("AnimState", 0);
+        }
     }
 
     void Attack()
@@ -158,6 +174,7 @@ public class Bandit : MonoBehaviour {
         }
         
         m_animator.runtimeAnimatorController = animations[state];
+        m_groundSensor.Swap();
 
 
         switch(state){
@@ -168,10 +185,10 @@ public class Bandit : MonoBehaviour {
            case 1:
                m_speed = 6.5f;
                m_jumpForce = 8;
+               m_box2d.size = new Vector2(.35f, .4f);
+               m_box2d.offset = new Vector2(0f, .067f);
+               m_groundSensor.SetOffset(0f, -.14f);
                break;
         }
-
-
-    
     }
 }
