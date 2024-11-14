@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Bandit : MonoBehaviour {
 
     [SerializeField] float      m_speed = 4.0f;
     [SerializeField] float      m_jumpForce = 7.5f;
+    [SerializeField] RuntimeAnimatorController [] animations;
+
 
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
@@ -14,6 +18,8 @@ public class Bandit : MonoBehaviour {
     private bool                m_grounded = false;
     private bool                m_combatIdle = false;
     private bool                m_isDead = false;
+    private int state = 0;
+    private int scale = 1;
 
     // Use this for initialization
     void Start () {
@@ -26,6 +32,7 @@ public class Bandit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         //Check if character just landed on the ground
         if (!m_grounded && m_groundSensor.State()) {
             m_grounded = true;
@@ -116,5 +123,32 @@ public class Bandit : MonoBehaviour {
     {
         // Deactivate the attack collider after the attack duration
         m_attackRadius.deactivate();
+    }
+
+    public void SwapState(){
+        if(state < animations.Length - 1){
+            state++;
+        }
+        else{
+            state = 0;
+        }
+        
+        m_animator.runtimeAnimatorController = animations[state];
+
+
+        switch(state){
+           case 0:
+               m_speed = 8.5f;
+               m_jumpForce = 10f;
+               break;
+           case 1:
+               m_speed = 6.5f;
+               m_jumpForce = 8;
+               break;
+        }
+        m_grounded = true;
+        m_animator.SetInteger("AnimState", 0);
+
+    
     }
 }
