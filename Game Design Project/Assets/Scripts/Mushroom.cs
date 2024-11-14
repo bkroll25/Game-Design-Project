@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using System.Security.Cryptography;
 using UnityEngine;
 
-public class SkeletonTest : MonoBehaviour
+public class Mushroom : MonoBehaviour
 {
     private Animator m_animator;
     private Rigidbody2D m_body2d;
@@ -18,7 +15,7 @@ public class SkeletonTest : MonoBehaviour
     void Start()
     {
         m_animator = GetComponent<Animator>();
-        m_body2d = GetComponent<Rigidbody2D>(); 
+        m_body2d = GetComponent<Rigidbody2D>();
         m_health = GetComponent<EnemyHealth>();
         m_attackRadius = transform.Find("EnemyAttackRadius").GetComponent<EnemyAttackRadius>();
     }
@@ -37,7 +34,7 @@ public class SkeletonTest : MonoBehaviour
             if (!hit)
             {
                 m_animator.SetBool("Moving", false);
-                m_animator.Play("SkeletonAttack", 0, 0f);
+                m_animator.Play("MushroomAttack", 0, 0f);
                 Invoke("Attack", 0.4f);
                 hit = true;
                 Invoke("ResetHit", 1.2f);
@@ -49,13 +46,13 @@ public class SkeletonTest : MonoBehaviour
             if (player.position.x < transform.position.x)
             {
                 transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
-                m_body2d.velocity = new Vector2(-2f, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(-1f, m_body2d.velocity.y);
                 m_animator.SetBool("Moving", true);
             }
             else
             {
                 transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
-                m_body2d.velocity = new Vector2(2f, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(1f, m_body2d.velocity.y);
                 m_animator.SetBool("Moving", true);
             }
         }

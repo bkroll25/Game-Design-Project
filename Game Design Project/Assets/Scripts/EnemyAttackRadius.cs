@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonAttackRadius : MonoBehaviour
+public class EnemyAttackRadius : MonoBehaviour
 {
     private int m_ColCount = 0;
     public int damage = 10;
