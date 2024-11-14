@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
-    private int maxHealth;
+    public int maxHealth = 100;
     private int currentHealth;
     private Animator m_animator;
     private float m_DisableTimer;
     private bool dying;
-    private bool hit;
 
     void Start()
     {
         m_animator = GetComponent<Animator>();
-        dying = false;
-        hit = false;
-        maxHealth = 50;
         currentHealth = maxHealth;
+        dying = false;
     }
 
     void Update()
@@ -33,20 +30,17 @@ public class EnemyHealth : MonoBehaviour
         if (m_DisableTimer <= 0f)
         {
             currentHealth -= damage;
-            UnityEngine.Debug.Log("Enemy Health: " + currentHealth);
-            m_DisableTimer = 5f;
+            UnityEngine.Debug.Log("Player Health: " + currentHealth);
+            m_DisableTimer = 7f;
             if (currentHealth <= 0)
             {
-                m_animator.SetBool("Dying", true);
+                m_animator.SetTrigger("Death");
                 dying = true;
                 Invoke("Die", .5f);
             }
             else
             {
-                m_animator.SetTrigger("Hit");
-                UnityEngine.Debug.Log("Hit Played");
-                hit = true;
-                Invoke("ResetHit", 0.4f);
+                m_animator.SetTrigger("Hurt");
             }
         }
     }
@@ -57,18 +51,8 @@ public class EnemyHealth : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void ResetHit()
-    {
-        hit = false; 
-    }
-
     public bool IsDead()
     {
         return dying;
-    }
-
-    public bool IsHit()
-    {
-        return hit;
     }
 }

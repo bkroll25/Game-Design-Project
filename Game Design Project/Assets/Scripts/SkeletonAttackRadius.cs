@@ -1,9 +1,8 @@
-using UnityEngine;
 using System.Collections;
-using System.ComponentModel.Design;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class AttackRadius : MonoBehaviour
+public class SkeletonAttackRadius : MonoBehaviour
 {
     private int m_ColCount = 0;
     public int damage = 10;
@@ -25,10 +24,10 @@ public class AttackRadius : MonoBehaviour
         active = true;
         for (int i = 0; i < collisions.Count; i++)
         {
-            EnemyHealth enemyHealth = collisions[i].GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            PlayerHealth playerHealth = collisions[i].GetComponent<PlayerHealth>();
+            if (playerHealth != null)
             {
-                enemyHealth.TakeDamage(damage);
+                playerHealth.TakeDamage(damage);
             }
         }
     }
@@ -40,16 +39,16 @@ public class AttackRadius : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         m_ColCount++;
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Player"))
         {
             collisions.Add(other);
             if (active)
             {
                 // Get the enemy's health and apply damage
-                EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
+                PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
                 {
-                    enemyHealth.TakeDamage(damage);
+                    playerHealth.TakeDamage(damage);
                 }
             }
         }
