@@ -7,6 +7,7 @@ public class Bandit : MonoBehaviour {
 
     [SerializeField] float      m_speed = 4.0f;
     [SerializeField] float      m_jumpForce = 7.5f;
+
     [SerializeField] RuntimeAnimatorController [] animations;
 
 
@@ -18,8 +19,10 @@ public class Bandit : MonoBehaviour {
     private bool                m_grounded = false;
     private bool                m_combatIdle = false;
     private bool                m_isDead = false;
-    private int state = 0;
-    private int scale = 1;
+
+    private int                 state = 0;
+    private int                 scale = 1;
+    private bool                moving = false;
 
     // Use this for initialization
     void Start () {
@@ -32,6 +35,10 @@ public class Bandit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        //ensures player is not pushing enemies, but can run away from them
+        //and can play proper animations
+        moving = false;
 
         //Check if character just landed on the ground
         if (!m_grounded && m_groundSensor.State()) {
@@ -55,9 +62,26 @@ public class Bandit : MonoBehaviour {
             transform.localScale = new Vector3(-3.0f, 3.0f, 3.0f);
 
         // Move if not running into enemy
-        if (!m_enemySensor.State())
+        if (!m_enemySensor.StateLeft() && !m_enemySensor.StateRight())
         {
+            moving = true;
             m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+        }
+        else if (m_enemySensor.StateLeft())
+        {
+            if (inputX > 0)
+            {
+                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                moving = true;
+            }
+        }
+        else
+        {
+            if (inputX < 0)
+            {
+                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                moving = true;
+            }
         }
 
         //Set AirSpeed in animator
@@ -98,7 +122,7 @@ public class Bandit : MonoBehaviour {
         }
 
         //Run
-        else if (Mathf.Abs(inputX) > Mathf.Epsilon && !m_enemySensor.State())
+        else if (Mathf.Abs(inputX) > Mathf.Epsilon && moving)
             m_animator.SetInteger("AnimState", 2);
 
         //Combat Idle

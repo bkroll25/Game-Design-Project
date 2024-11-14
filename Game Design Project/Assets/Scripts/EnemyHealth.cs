@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    private int maxHealth;
+    public int maxHealth;
     private int currentHealth;
     private Animator m_animator;
     private float m_DisableTimer;
@@ -16,7 +16,6 @@ public class EnemyHealth : MonoBehaviour
         m_animator = GetComponent<Animator>();
         dying = false;
         hit = false;
-        maxHealth = 50;
         currentHealth = maxHealth;
     }
 
