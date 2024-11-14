@@ -170,8 +170,7 @@ public class Bandit : MonoBehaviour {
                m_jumpForce = 8;
                break;
         }
-        m_grounded = true;
-        m_animator.SetInteger("AnimState", 0);
+
 
     
     }
