@@ -55,4 +55,8 @@ public class PlayerHealth : MonoBehaviour
     {
         return dying;
     }
+
+    public int getCurrentHealth(){
+        return currentHealth;
+    }
 }
