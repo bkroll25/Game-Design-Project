@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb198617-ffee-46f0-b250-1498d054a5dd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Characters/Hero_Knight_2/Sprites/idle_animation.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Characters/Hero_Knight_2/Sprites/idle_animation.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Characters/Martial Hero/Animations/Martial Hero.anim" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Characters/Martial Hero/Animations/Martial Hero.anim.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Characters/Martial Hero/Animations/Martial Hero.controller" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Characters/Martial Hero/Animations/Martial Hero.controller.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Enemies/Bandits - Pixel Art/Demo/Bandit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Enemies/Bandits - Pixel Art/Demo/Bandit.cs" afterDir="false" />
-    </list>
+    <list default="true" id="eb198617-ffee-46f0-b250-1498d054a5dd" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,6 +99,7 @@
       <updated>1731518441590</updated>
       <workItem from="1731518442900" duration="13789000" />
       <workItem from="1731553966233" duration="468000" />
+      <workItem from="1731558740664" duration="610000" />
     </task>
     <servers />
   </component>
