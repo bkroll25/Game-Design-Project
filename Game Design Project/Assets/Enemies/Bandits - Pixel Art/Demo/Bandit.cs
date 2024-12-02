@@ -24,6 +24,10 @@ public class Bandit : MonoBehaviour {
     private int                 state = 0;
     private int                 scale = 1;
     private bool                moving = false;
+    public int stamina = 1000;
+    private bool running = false;
+    private float run_speed = 1.25f;
+    public int max_stamina = 1000;
 
     // Use this for initialization
     void Start () {
@@ -63,17 +67,42 @@ public class Bandit : MonoBehaviour {
         else if (inputX < 0)
             transform.localScale = new Vector3(-3.0f, 3.0f, 3.0f);
 
+        if(Input.GetKey(KeyCode.LeftShift)){
+            if(inputX != 0){
+                if(stamina <= 0){
+                    running = false;
+                }
+                else if(stamina > 0){
+                    stamina -= 1;
+                    running = true;
+                }
+            }
+        }else{
+            if(inputX == 0){
+                running = false;
+                if(stamina >= max_stamina){
+                    stamina = max_stamina;
+                }
+                else if(stamina < max_stamina){
+                    stamina += 1;
+                }
+                if(stamina < 0){
+                    stamina = 0;
+                }
+            }
+        }
+        
         // Move if not running into enemy
         if (!m_enemySensor.StateLeft() && !m_enemySensor.StateRight())
         {
             moving = true;
-            m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+            m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
         }
         else if (m_enemySensor.StateLeft())
         {
             if (inputX > 0)
             {
-                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
                 moving = true;
             }
         }
@@ -81,7 +110,7 @@ public class Bandit : MonoBehaviour {
         {
             if (inputX < 0)
             {
-                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
                 moving = true;
             }
         }

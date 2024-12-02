@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb198617-ffee-46f0-b250-1498d054a5dd" name="Changes" comment="" />
+    <list default="true" id="eb198617-ffee-46f0-b250-1498d054a5dd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Stamina_manager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Stamina_manager.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Game Design Project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Game Design Project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Enemies/Bandits - Pixel Art/Demo/Bandit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Enemies/Bandits - Pixel Art/Demo/Bandit.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -100,6 +105,8 @@
       <workItem from="1731518442900" duration="13789000" />
       <workItem from="1731553966233" duration="468000" />
       <workItem from="1731558740664" duration="610000" />
+      <workItem from="1732040988940" duration="461000" />
+      <workItem from="1733174047556" duration="3036000" />
     </task>
     <servers />
   </component>
