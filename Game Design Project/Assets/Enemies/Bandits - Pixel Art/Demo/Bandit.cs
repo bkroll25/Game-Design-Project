@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Bandit : MonoBehaviour {
 
@@ -220,6 +221,15 @@ public class Bandit : MonoBehaviour {
                m_capsule2d.offset = new Vector2(0f, .067f);
                m_groundSensor.SetOffset(0f, -.14f);
                break;
+        }
+    }
+    
+    // Door Logic
+    void OnTriggerStay2D(Collider2D other){
+        if(other.gameObject.CompareTag("Door Boss")){
+            if(Input.GetKeyDown("l")){
+                SceneManager.LoadScene("Boss Placeholder", LoadSceneMode.Single);
+            }
         }
     }
 }
