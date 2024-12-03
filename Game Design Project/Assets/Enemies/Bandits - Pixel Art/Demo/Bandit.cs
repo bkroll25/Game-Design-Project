@@ -21,15 +21,17 @@ public class Bandit : MonoBehaviour {
     private bool                m_grounded = false;
     private bool                m_combatIdle = false;
     private bool                m_isDead = false;
-
+    
+    public int                  max_stamina = 1000;
+    public int                  stamina = 1000;
+    public bool                 key = true;
+    
     private int                 state = 0;
     private int                 scale = 1;
     private bool                moving = false;
-    public int stamina = 1000;
-    private bool running = false;
-    private float run_speed = 1.25f;
-    public int max_stamina = 1000;
-
+    private bool                running = false;
+    private float               run_speed = 1.25f;
+       
     // Use this for initialization
     void Start () {
         m_animator = GetComponent<Animator>();
@@ -227,7 +229,7 @@ public class Bandit : MonoBehaviour {
     // Door Logic
     void OnTriggerStay2D(Collider2D other){
         if(other.gameObject.CompareTag("Door Boss")){
-            if(Input.GetKeyDown("l")){
+            if(Input.GetKeyDown("l") && key){
                 SceneManager.LoadScene("Boss Placeholder", LoadSceneMode.Single);
             }
         }
