@@ -38,7 +38,7 @@ public class EnemyHealth : MonoBehaviour
             {
                 m_animator.SetBool("Dying", true);
                 dying = true;
-                Invoke("Die", .5f);
+                Invoke("Die", 1.28f);
             }
             else
             {

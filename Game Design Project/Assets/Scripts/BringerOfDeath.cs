@@ -1,45 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Threading;
 using UnityEngine;
 
-public class FlyingEye : MonoBehaviour
+public class BringerOfDeath : MonoBehaviour
 {
     private Animator m_animator;
     private Rigidbody2D m_body2d;
     private bool hit;
-    private EnemyHealth m_health;
+    private BringerOfDeathHealth m_health;
     public Transform player;
     private EnemyAttackRadius m_attackRadius;
-    private BoxCollider2D m_boxCollider;
-    private bool sizeset;
+    private BoxCollider2D m_boxCollider; 
+    public GameObject projectile;
+    private bool thrown;
 
     // Start is called before the first frame update
     void Start()
     {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
-        m_health = GetComponent<EnemyHealth>();
+        m_health = GetComponent<BringerOfDeathHealth>();
         m_attackRadius = transform.Find("EnemyAttackRadius").GetComponent<EnemyAttackRadius>();
         m_boxCollider = GetComponent<BoxCollider2D>();
-
-        sizeset = false;
+        thrown = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         //let animations play
-        if (m_health.IsDead() && !sizeset)
-        {
-            m_boxCollider.offset = new Vector2(0f, 0f);
-            Vector2 newSize = m_boxCollider.size;
-            newSize.y = 0.45f;
-            m_boxCollider.size = newSize;
-            sizeset = true;
-        }
         if (m_health.IsDead() || m_health.IsHit()) return;
+
         //cooldown for attacks
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
         //if skeleton in range to attack
         if (distanceToPlayer < 1.5f)
         {
@@ -47,24 +45,40 @@ public class FlyingEye : MonoBehaviour
             if (!hit)
             {
                 m_animator.SetBool("Moving", false);
-                m_animator.Play("FlyingEyeAttack", 0, 0f);
+                m_animator.Play("Attack", 0, 0f);
                 Invoke("Attack", 0.4f);
                 hit = true;
                 Invoke("ResetHit", 1.2f);
             }
         }
+        else if (!thrown && distanceToPlayer < 4f)
+        {
+            m_body2d.velocity = new Vector2(0f, m_body2d.velocity.y);
+            if (!hit)
+            {
+                m_animator.SetBool("Moving", false);
+                m_animator.SetTrigger("Projectile");
+                Invoke("FireProjectile", 0.4f);
+                thrown = true;
+                Invoke("ResetThrown", 5f);
+                hit = true;
+                Invoke("ResetHit", 1.2f);
+            }
+        }
         //if skeleton in range to follow
-        else if (distanceToPlayer < 4)
+        else if (distanceToPlayer < 6)
         {
             if (player.position.x < transform.position.x)
             {
-                transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
+                if (transform.localScale.x < 0) Invoke("Switch", 0.01f);
+                transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
                 m_body2d.velocity = new Vector2(-2f, m_body2d.velocity.y);
                 m_animator.SetBool("Moving", true);
             }
             else
             {
-                transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+                if (transform.localScale.x > 0) Invoke("Switch", 0.01f);
+                transform.localScale = new Vector3(-3.0f, 3.0f, 3.0f);
                 m_body2d.velocity = new Vector2(2f, m_body2d.velocity.y);
                 m_animator.SetBool("Moving", true);
             }
@@ -96,5 +110,21 @@ public class FlyingEye : MonoBehaviour
     private void ResetHit()
     {
         hit = false;
+    }
+
+    private void ResetThrown()
+    {
+        thrown = false;
+    }
+
+    private void Switch()
+    {
+        m_animator.SetTrigger("Switch");
+    }
+
+    private void FireProjectile()
+    {
+        // Instantiate the projectile at the attack poin
+        GameObject spell = Instantiate(projectile, transform.position, Quaternion.identity);
     }
 }

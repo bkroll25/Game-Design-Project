@@ -30,6 +30,11 @@ public class AttackRadius : MonoBehaviour
             {
                 enemyHealth.TakeDamage(damage);
             }
+            BringerOfDeathHealth bossHealth = collisions[i].GetComponent<BringerOfDeathHealth>();
+            if (bossHealth != null)
+            {
+                bossHealth.TakeDamage(damage);
+            }
         }
     }
     public void deactivate()

@@ -28,6 +28,7 @@ public class SkeletonTest : MonoBehaviour
     {
         //let animations play
         if (m_health.IsDead() || m_health.IsHit()) return;
+        
         //cooldown for attacks
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         //if skeleton in range to attack
