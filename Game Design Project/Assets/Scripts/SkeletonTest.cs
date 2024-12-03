@@ -88,4 +88,14 @@ public class SkeletonTest : MonoBehaviour
     {
         hit = false;
     }
+
+    public bool IsDeath()
+    {
+        return m_health.IsDead();
+    }
+
+    public Vector3 GetPos()
+    {
+        return transform.position;
+    }
 }

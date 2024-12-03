@@ -59,7 +59,10 @@ public class BringerOfDeathHealth : MonoBehaviour
 
                     m_animator.SetTrigger("Hit");
                 }
-                else Invoke("Teleport", 0.2f);
+                else
+                {
+                    Invoke("Teleport", 0.2f);
+                }
             }
         }
     }

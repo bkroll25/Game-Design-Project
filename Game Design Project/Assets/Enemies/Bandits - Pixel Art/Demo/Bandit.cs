@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 public class Bandit : MonoBehaviour {
 
@@ -21,6 +22,7 @@ public class Bandit : MonoBehaviour {
     private bool                m_grounded = false;
     private bool                m_combatIdle = false;
     private bool                m_isDead = false;
+    public GameObject           m_needkey;
     
     public int                  max_stamina = 1000;
     public int                  stamina = 1000;
@@ -40,6 +42,7 @@ public class Bandit : MonoBehaviour {
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Bandit>();
         m_enemySensor = transform.Find("EnemySensor").GetComponent<Enemy_Sensor_Bandit>();
         m_attackRadius = transform.Find("AttackRadius").GetComponent<AttackRadius>();
+        if (m_needkey != null) m_needkey.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -86,7 +89,7 @@ public class Bandit : MonoBehaviour {
                 if(stamina >= max_stamina){
                     stamina = max_stamina;
                 }
-                else if(stamina < max_stamina){
+                else if(stamina < max_stamina && m_grounded){
                     stamina += 1;
                 }
                 if(stamina < 0){
@@ -98,8 +101,9 @@ public class Bandit : MonoBehaviour {
         // Move if not running into enemy
         if (!m_enemySensor.StateLeft() && !m_enemySensor.StateRight())
         {
+            float factor = stamina < max_stamina / 2 ? .5f : 1f;
             moving = true;
-            m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
+            m_body2d.velocity = new Vector2((inputX * m_speed * (running ? run_speed:1)) * factor, m_body2d.velocity.y);
         }
         else if (m_enemySensor.StateLeft())
         {
@@ -157,6 +161,7 @@ public class Bandit : MonoBehaviour {
         //Jump
         else if (Input.GetKeyDown("space") && m_grounded)
         {
+            stamina -= 80;
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
             m_animator.SetTrigger("Jump");
@@ -174,6 +179,14 @@ public class Bandit : MonoBehaviour {
         else if (m_combatIdle)
         {
             m_animator.SetInteger("AnimState", 1);
+        }
+        else if (Input.GetKeyDown("i"))
+        {
+            m_needkey.SetActive(!m_needkey.activeSelf);
+        }
+        else if (Input.GetKeyDown("b"))
+        {
+            SceneManager.LoadScene("game_zachariaStrange_save 1", LoadSceneMode.Single);
         }
         //Idle
         else
@@ -229,8 +242,9 @@ public class Bandit : MonoBehaviour {
     // Door Logic
     void OnTriggerStay2D(Collider2D other){
         if(other.gameObject.CompareTag("Door Boss")){
-            if(Input.GetKeyDown("l") && key){
-                SceneManager.LoadScene("Boss Placeholder", LoadSceneMode.Single);
+            if (Input.GetKeyDown("b") && key)
+            {
+                SceneManager.LoadScene("game_zachariaStrange_save 1", LoadSceneMode.Single);
             }
         }
     }

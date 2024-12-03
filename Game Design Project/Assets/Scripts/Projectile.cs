@@ -80,4 +80,12 @@ public class Projectile : MonoBehaviour
         dead = true;
         Destroy(gameObject);
     }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
