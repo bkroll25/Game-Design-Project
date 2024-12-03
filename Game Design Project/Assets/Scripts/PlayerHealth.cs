@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class PlayerHealth : MonoBehaviour
         if (m_DisableTimer > 0f)
         {
             m_DisableTimer -= 0.02f;
+        }
+
+        if(currentHealth <= 0){
+            SceneManager.LoadScene("Death", LoadSceneMode.Single);
         }
     }
 
@@ -58,5 +63,12 @@ public class PlayerHealth : MonoBehaviour
 
     public int getCurrentHealth(){
         return currentHealth;
+    }
+    
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("Death Barrier")){
+            currentHealth = 0;
+        }
     }
 }

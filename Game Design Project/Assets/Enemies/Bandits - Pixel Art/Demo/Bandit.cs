@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Bandit : MonoBehaviour {
 
@@ -13,23 +14,29 @@ public class Bandit : MonoBehaviour {
 
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
-    private BoxCollider2D       m_box2d;
+    private CapsuleCollider2D   m_capsule2d;
     private Sensor_Bandit       m_groundSensor;
     private Enemy_Sensor_Bandit m_enemySensor;
     private AttackRadius        m_attackRadius;
     private bool                m_grounded = false;
     private bool                m_combatIdle = false;
     private bool                m_isDead = false;
-
+    
+    public int                  max_stamina = 1000;
+    public int                  stamina = 1000;
+    public bool                 key = true;
+    
     private int                 state = 0;
     private int                 scale = 1;
     private bool                moving = false;
-
+    private bool                running = false;
+    private float               run_speed = 1.25f;
+       
     // Use this for initialization
     void Start () {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
-        m_box2d = GetComponent<BoxCollider2D>();
+        m_capsule2d = GetComponent<CapsuleCollider2D>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Bandit>();
         m_enemySensor = transform.Find("EnemySensor").GetComponent<Enemy_Sensor_Bandit>();
         m_attackRadius = transform.Find("AttackRadius").GetComponent<AttackRadius>();
@@ -63,17 +70,42 @@ public class Bandit : MonoBehaviour {
         else if (inputX < 0)
             transform.localScale = new Vector3(-3.0f, 3.0f, 3.0f);
 
+        if(Input.GetKey(KeyCode.LeftShift)){
+            if(inputX != 0){
+                if(stamina <= 0){
+                    running = false;
+                }
+                else if(stamina > 0){
+                    stamina -= 1;
+                    running = true;
+                }
+            }
+        }else{
+            if(inputX == 0){
+                running = false;
+                if(stamina >= max_stamina){
+                    stamina = max_stamina;
+                }
+                else if(stamina < max_stamina){
+                    stamina += 1;
+                }
+                if(stamina < 0){
+                    stamina = 0;
+                }
+            }
+        }
+        
         // Move if not running into enemy
         if (!m_enemySensor.StateLeft() && !m_enemySensor.StateRight())
         {
             moving = true;
-            m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+            m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
         }
         else if (m_enemySensor.StateLeft())
         {
             if (inputX > 0)
             {
-                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
                 moving = true;
             }
         }
@@ -81,7 +113,7 @@ public class Bandit : MonoBehaviour {
         {
             if (inputX < 0)
             {
-                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+                m_body2d.velocity = new Vector2(inputX * m_speed * (running ? run_speed:1), m_body2d.velocity.y);
                 moving = true;
             }
         }
@@ -148,6 +180,8 @@ public class Bandit : MonoBehaviour {
         {
             m_animator.SetInteger("AnimState", 0);
         }
+        
+        
     }
 
     void Attack()
@@ -185,10 +219,19 @@ public class Bandit : MonoBehaviour {
            case 1:
                m_speed = 6.5f;
                m_jumpForce = 8;
-               m_box2d.size = new Vector2(.35f, .4f);
-               m_box2d.offset = new Vector2(0f, .067f);
+               m_capsule2d.size = new Vector2(.35f, .4f);
+               m_capsule2d.offset = new Vector2(0f, .067f);
                m_groundSensor.SetOffset(0f, -.14f);
                break;
+        }
+    }
+    
+    // Door Logic
+    void OnTriggerStay2D(Collider2D other){
+        if(other.gameObject.CompareTag("Door Boss")){
+            if(Input.GetKeyDown("l") && key){
+                SceneManager.LoadScene("Boss Placeholder", LoadSceneMode.Single);
+            }
         }
     }
 }
